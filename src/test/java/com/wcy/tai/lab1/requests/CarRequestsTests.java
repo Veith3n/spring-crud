@@ -22,25 +22,28 @@ class CarRequestsTests {
 
     @Test
     public void addsAndListCars() throws Exception {
-        var baseUrl = "http://localhost:" + port;
         var carDto = new CarRequest(1, "foo");
 
         // DB has empty state
-        var cars = getCars(baseUrl);
+        var cars = getCars();
         assertThat(cars.length).isEqualTo(0);
 
         // Creates car
-        createCar(baseUrl, carDto);
+        createCar(carDto);
 
         // Returns car
-        cars = getCars(baseUrl);
+        cars = getCars();
 
         assertThat(cars.length).isEqualTo(1);
         assertThat(cars[0].getModel()).isEqualTo("foo");
     }
 
-    private CarResponse[] getCars(String baseUrl) {
-        var carGetUrl = baseUrl + "/";
+    private String baseUrl() {
+        return "http://localhost:" + port;
+    }
+
+    private CarResponse[] getCars() {
+        var carGetUrl = baseUrl() + "/";
 
         var responseEntity = restTemplate.getForEntity(carGetUrl, CarResponse[].class);
 
@@ -49,8 +52,8 @@ class CarRequestsTests {
         return responseEntity.getBody();
     }
 
-    private void createCar(String baseUrl, CarRequest carDto) {
-        var carPostUrl = baseUrl + "/add";
+    private void createCar(CarRequest carDto) {
+        var carPostUrl = baseUrl() + "/add";
         var body = new HttpEntity<>(carDto);
 
         var res = restTemplate.postForEntity(carPostUrl, body, void.class);
