@@ -10,10 +10,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CarResponse {
-private long id;
-private String producer;
-private String model;
-private Long topSpeed;
+    private long id;
+    private String producer;
+    private String model;
+    private Long topSpeed;
 
     public CarResponse(long id, String producer, String model) {
         this.id = id;

@@ -13,21 +13,19 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CarServiceImpl implements CarService{
+public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
     private final CarToResponseMapper carToResponseMapper;
     private final RequestToCarMapper requestToCarMapper;
 
-    public
-    List<CarResponse> getAllCars() {
-    return carRepository.findAll().stream()
-            .map(carToResponseMapper::toResponse)
-            .collect(Collectors.toList());
+    @Override
+    public List<CarResponse> getAllCars() {
+        return carRepository.findAll().stream().map(CarToResponseMapper::toResponse).collect(Collectors.toList());
     }
 
     @Override
     public void addCar(CarRequest carRequest) {
-        carRepository.save(requestToCarMapper.mapToCar(carRequest));
+        carRepository.save(RequestToCarMapper.mapToCar(carRequest));
     }
 }

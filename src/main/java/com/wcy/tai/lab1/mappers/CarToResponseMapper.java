@@ -7,11 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CarToResponseMapper {
 
-    public CarResponse toResponse(Car car){
-        return new CarResponse(
-                car.getId(),
-                car.getProducer().getName(),
-                car.getModel()
-        );
+    public static CarResponse toResponse(Car car) {
+        return new CarResponse(car.getId(), car.getProducer().getName(), car.getModel());
     }
 }

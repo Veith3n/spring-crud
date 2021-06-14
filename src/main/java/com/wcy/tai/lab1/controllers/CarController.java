@@ -14,11 +14,10 @@ import java.util.List;
 @RestController("/cars")
 @RequiredArgsConstructor
 public class CarController {
-
     private final CarService carService;
 
     @GetMapping()
-    public List<CarResponse> getAllCars(){
+    public List<CarResponse> getAllCars() {
         return carService.getAllCars();
     }
 

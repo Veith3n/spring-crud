@@ -14,47 +14,47 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CarRequestsTests {
-  @LocalServerPort
-  private int port;
+    @LocalServerPort
+    private int port;
 
-  @Autowired
-  private TestRestTemplate restTemplate;
+    @Autowired
+    private TestRestTemplate restTemplate;
 
-  @Test
-  public void addsAndListCars() throws Exception {
-    var baseUrl = "http://localhost:" + port;
-    var carDto = new CarRequest(1, "foo");
+    @Test
+    public void addsAndListCars() throws Exception {
+        var baseUrl = "http://localhost:" + port;
+        var carDto = new CarRequest(1, "foo");
 
-    // DB has empty state
-    var cars = getCars(baseUrl);
-    assertThat(cars.length).isEqualTo(0);
+        // DB has empty state
+        var cars = getCars(baseUrl);
+        assertThat(cars.length).isEqualTo(0);
 
-    // Creates car
-    createCar(baseUrl, carDto);
+        // Creates car
+        createCar(baseUrl, carDto);
 
-    // Returns car
-    cars = getCars(baseUrl);
+        // Returns car
+        cars = getCars(baseUrl);
 
-    assertThat(cars.length).isEqualTo(1);
-    assertThat(cars[0].getModel()).isEqualTo("foo");
-  }
+        assertThat(cars.length).isEqualTo(1);
+        assertThat(cars[0].getModel()).isEqualTo("foo");
+    }
 
-  private CarResponse[] getCars(String baseUrl) {
-    var carGetUrl = baseUrl + "/";
+    private CarResponse[] getCars(String baseUrl) {
+        var carGetUrl = baseUrl + "/";
 
-    var responseEntity = restTemplate.getForEntity(carGetUrl, CarResponse[].class);
+        var responseEntity = restTemplate.getForEntity(carGetUrl, CarResponse[].class);
 
-    assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-    return responseEntity.getBody();
-  }
+        return responseEntity.getBody();
+    }
 
-  private void createCar(String baseUrl, CarRequest carDto) {
-    var carPostUrl = baseUrl + "/add";
-    var body = new HttpEntity<>(carDto);
+    private void createCar(String baseUrl, CarRequest carDto) {
+        var carPostUrl = baseUrl + "/add";
+        var body = new HttpEntity<>(carDto);
 
-    var res = restTemplate.postForEntity(carPostUrl, body, void.class);
+        var res = restTemplate.postForEntity(carPostUrl, body, void.class);
 
-    assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-  }
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
 }

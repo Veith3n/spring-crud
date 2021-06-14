@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RequestToCarMapper {
 
-    public Car mapToCar(CarRequest request){
+    public static Car mapToCar(CarRequest request) {
         Car car = new Car();
         car.setModel(request.getModel());
         car.setProducer(new Producer(request.getProducerId(), null));
