@@ -50,7 +50,7 @@ class TeachersTests {
         assertThat(teachers.length).isEqualTo(1);
         assertThat(teachers[0].getName()).isEqualTo("bar");
         assertThat(teachers[0].getSurname()).isEqualTo("foo");
-        assertThat(teachers[0].getId()).isInstanceOf(Long.class);
+        assertThat(teachers[0].getId()).isEqualTo(Long.parseLong(res.getBody()));
     }
 
     private String baseUrl() {
@@ -65,9 +65,9 @@ class TeachersTests {
         return responseEntity.getBody();
     }
 
-    private ResponseEntity<Void> createTeacher(CreateTeacherRequest teacherDto) {
+    private ResponseEntity<String> createTeacher(CreateTeacherRequest teacherDto) {
         var body = new HttpEntity<>(teacherDto);
 
-        return restTemplate.postForEntity(baseUrl(), body, void.class);
+        return restTemplate.postForEntity(baseUrl(), body, String.class);
     }
 }

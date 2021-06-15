@@ -23,7 +23,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void addTeacher(CreateTeacherRequest createTeacherRequest) {
-        teacherRepository.save(CreateTeacherRequestToTeacherMapper.mapToTeacher(createTeacherRequest));
+    public Long addTeacher(CreateTeacherRequest createTeacherRequest) {
+        return teacherRepository.save(CreateTeacherRequestToTeacherMapper.mapToTeacher(createTeacherRequest)).getId();
     }
 }

@@ -23,7 +23,7 @@ public class TeacherController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public void addTeacher(@RequestBody @Valid CreateTeacherRequest teacherRequest) {
-        teacherService.addTeacher(teacherRequest);
+    public Long addTeacher(@RequestBody @Valid CreateTeacherRequest teacherRequest) {
+        return teacherService.addTeacher(teacherRequest);
     }
 }

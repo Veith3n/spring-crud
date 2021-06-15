@@ -8,5 +8,5 @@ import java.util.List;
 public interface TeacherService {
     List<TeacherResponse> listTeachers();
 
-    void addTeacher(CreateTeacherRequest createTeacherRequest);
+    Long addTeacher(CreateTeacherRequest createTeacherRequest);
 }
