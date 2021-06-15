@@ -2,6 +2,8 @@ package com.wcy.tai.lab1.requests;
 
 import com.wcy.tai.lab1.dtos.CreateTeacherRequest;
 import com.wcy.tai.lab1.dtos.TeacherResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -53,6 +55,37 @@ class TeachersTests {
         assertThat(teachers[0].getId()).isEqualTo(Long.parseLong(res.getBody()));
     }
 
+    @Nested
+    class TestWithExitingTeacher {
+        Long teacherId;
+
+        @BeforeEach
+        void createNewStack() {
+            var teacherDto = new CreateTeacherRequest("bar", "foo");
+
+            var res = createTeacher(teacherDto);
+            assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+           
+            teacherId = Long.parseLong(res.getBody());
+        }
+
+        @Test
+        public void listTeacherWithCorrectId() {
+            var res = getTeacher(teacherId);
+
+            assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(res.getBody().getName()).isEqualTo("bar");
+            assertThat(res.getBody().getSurname()).isEqualTo("foo");
+        }
+
+        @Test
+        public void listTeacherWithInCorrectId() {
+            var res = getTeacher(99999999L);
+
+            assertThat(res.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        }
+    }
+
     private String baseUrl() {
         return "http://localhost:" + port + "/teachers/";
     }
@@ -63,6 +96,12 @@ class TeachersTests {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         return responseEntity.getBody();
+    }
+
+    private ResponseEntity<TeacherResponse> getTeacher(Long id) {
+        var getTeacherUrl = baseUrl() + id;
+
+        return restTemplate.getForEntity(getTeacherUrl, TeacherResponse.class);
     }
 
     private ResponseEntity<String> createTeacher(CreateTeacherRequest teacherDto) {
