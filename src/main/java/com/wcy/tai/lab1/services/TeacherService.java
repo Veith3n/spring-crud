@@ -12,5 +12,7 @@ public interface TeacherService {
 
     Optional<Teacher> getTeacher(Long teacherId);
 
+    void deleteTeacher(Long teacherId);
+
     Long addTeacher(CreateTeacherRequest createTeacherRequest);
 }

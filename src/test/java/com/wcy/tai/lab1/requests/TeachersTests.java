@@ -2,6 +2,8 @@ package com.wcy.tai.lab1.requests;
 
 import com.wcy.tai.lab1.dtos.CreateTeacherRequest;
 import com.wcy.tai.lab1.dtos.TeacherResponse;
+import com.wcy.tai.lab1.repositories.TeacherRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -10,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -22,6 +25,14 @@ class TeachersTests {
 
     @Autowired
     private TestRestTemplate restTemplate;
+
+    @Autowired
+    private TeacherRepository teacherRepo;
+
+    @AfterEach
+    void cleanUp() {
+        teacherRepo.deleteAll();
+    }
 
     @Test()
     public void validatesParamsDuringCreation() {
@@ -60,13 +71,18 @@ class TeachersTests {
         Long teacherId;
 
         @BeforeEach
-        void createNewStack() {
+        void setUp() {
             var teacherDto = new CreateTeacherRequest("bar", "foo");
 
             var res = createTeacher(teacherDto);
             assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-           
+
             teacherId = Long.parseLong(res.getBody());
+        }
+
+        @AfterEach
+        void cleanUp() {
+            deleteTeacher(teacherId);
         }
 
         @Test
@@ -83,6 +99,23 @@ class TeachersTests {
             var res = getTeacher(99999999L);
 
             assertThat(res.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        }
+
+        @Test
+        public void deletesTeacherWithCorrectId() throws Exception {
+            var res = deleteTeacher(teacherId);
+
+            assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+            var teachers = listTeachers();
+            assertThat(teachers.length).isEqualTo(0);
+        }
+
+        @Test
+        public void deletesTeacherWithInCorrectId() throws Exception {
+            var res = deleteTeacher(99999999L);
+
+            assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
         }
     }
 
@@ -108,5 +141,11 @@ class TeachersTests {
         var body = new HttpEntity<>(teacherDto);
 
         return restTemplate.postForEntity(baseUrl(), body, String.class);
+    }
+
+    private ResponseEntity<Void> deleteTeacher(Long id) {
+        var teacherDeleteUrl = baseUrl() + id;
+
+        return restTemplate.exchange(teacherDeleteUrl, HttpMethod.DELETE, null, Void.class);
     }
 }

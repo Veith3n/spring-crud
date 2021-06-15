@@ -7,6 +7,7 @@ import com.wcy.tai.lab1.mappers.CreateTeacherRequestToTeacherMapper;
 import com.wcy.tai.lab1.mappers.TeacherToResponseMapper;
 import com.wcy.tai.lab1.repositories.TeacherRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +28,13 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Optional<Teacher> getTeacher(Long teacherId) {
         return teacherRepository.findById(teacherId);
+    }
+
+    @Override
+    public void deleteTeacher(Long teacherId) {
+        try {
+            teacherRepository.deleteById(teacherId);
+        } catch (EmptyResultDataAccessException ignored) {}
     }
 
     @Override

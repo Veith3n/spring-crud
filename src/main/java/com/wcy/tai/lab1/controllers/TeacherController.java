@@ -33,6 +33,11 @@ public class TeacherController {
             return TeacherToResponseMapper.toResponse(maybeTeacher.get());
     }
 
+    @DeleteMapping(value = "{id}")
+    public void deleteTeacher(@PathVariable Long id) {
+        teacherService.deleteTeacher(id);
+    }
+
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Long addTeacher(@RequestBody @Valid CreateTeacherRequest teacherRequest) {
