@@ -2,6 +2,7 @@ package com.wcy.tai.lab1.controllers;
 
 import com.wcy.tai.lab1.dtos.CreateTeacherRequest;
 import com.wcy.tai.lab1.dtos.TeacherResponse;
+import com.wcy.tai.lab1.dtos.UpdateTeacherRequest;
 import com.wcy.tai.lab1.mappers.TeacherToResponseMapper;
 import com.wcy.tai.lab1.services.TeacherService;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +43,10 @@ public class TeacherController {
     @ResponseStatus(HttpStatus.CREATED)
     public Long addTeacher(@RequestBody @Valid CreateTeacherRequest teacherRequest) {
         return teacherService.addTeacher(teacherRequest);
+    }
+
+    @PutMapping(value = "{id}")
+    public void addTeacher(@PathVariable Long id, @RequestBody @Valid UpdateTeacherRequest updateTeacherRequest) {
+        teacherService.updateTeacher(id, updateTeacherRequest);
     }
 }

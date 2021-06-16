@@ -2,6 +2,7 @@ package com.wcy.tai.lab1.requests;
 
 import com.wcy.tai.lab1.dtos.CreateTeacherRequest;
 import com.wcy.tai.lab1.dtos.TeacherResponse;
+import com.wcy.tai.lab1.dtos.UpdateTeacherRequest;
 import com.wcy.tai.lab1.repositories.TeacherRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -95,10 +98,29 @@ class TeachersTests {
         }
 
         @Test
-        public void listTeacherWithInCorrectId() {
+        public void listTeacherWithIncorrectId() {
             var res = getTeacher(99999999L);
 
             assertThat(res.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        }
+
+        @Test
+        public void updatesTeacherDataWithCorrectId() {
+            var updateTeacherDto = new UpdateTeacherRequest(null, Optional.of("dope"));
+
+            updateTeacher(teacherId, updateTeacherDto);
+
+            var teacherRes = getTeacher(teacherId);
+
+            assertThat(teacherRes.getBody().getName()).isEqualTo("bar");
+            assertThat(teacherRes.getBody().getSurname()).isEqualTo("dope");
+        }
+
+        @Test
+        public void updatesTeacherDataWithIncorrectId() {
+            var updateTeacherDto = new UpdateTeacherRequest(null, Optional.of("dope"));
+
+            updateTeacher(99999999L, updateTeacherDto);
         }
 
         @Test
@@ -147,5 +169,15 @@ class TeachersTests {
         var teacherDeleteUrl = baseUrl() + id;
 
         return restTemplate.exchange(teacherDeleteUrl, HttpMethod.DELETE, null, Void.class);
+    }
+
+    private void updateTeacher(Long id, UpdateTeacherRequest updateTeacherDto) {
+        var teacherUpdateUrl = String.format("%s%s", baseUrl(), id);
+
+        var body = new HttpEntity<>(updateTeacherDto);
+
+        var res = restTemplate.exchange(teacherUpdateUrl, HttpMethod.PUT, body, Void.class);
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }
