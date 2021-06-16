@@ -22,7 +22,7 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TeachersTests {
+class TeachersRequestsTests {
     @LocalServerPort
     private int port;
 
