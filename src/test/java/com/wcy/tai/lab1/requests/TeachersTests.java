@@ -142,7 +142,7 @@ class TeachersTests {
     }
 
     private String baseUrl() {
-        return "http://localhost:" + port + "/teachers/";
+        return "http://localhost:" + port + "/teachers";
     }
 
     private TeacherResponse[] listTeachers() {
@@ -154,7 +154,7 @@ class TeachersTests {
     }
 
     private ResponseEntity<TeacherResponse> getTeacher(Long id) {
-        var getTeacherUrl = baseUrl() + id;
+        var getTeacherUrl = String.format("%s/%s", baseUrl(), id);
 
         return restTemplate.getForEntity(getTeacherUrl, TeacherResponse.class);
     }
@@ -166,13 +166,13 @@ class TeachersTests {
     }
 
     private ResponseEntity<Void> deleteTeacher(Long id) {
-        var teacherDeleteUrl = baseUrl() + id;
+        var teacherDeleteUrl = String.format("%s/%s", baseUrl(), id);
 
         return restTemplate.exchange(teacherDeleteUrl, HttpMethod.DELETE, null, Void.class);
     }
 
     private void updateTeacher(Long id, UpdateTeacherRequest updateTeacherDto) {
-        var teacherUpdateUrl = String.format("%s%s", baseUrl(), id);
+        var teacherUpdateUrl = String.format("%s/%s", baseUrl(), id);
 
         var body = new HttpEntity<>(updateTeacherDto);
 

@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/teachers/")
+@RequestMapping("/teachers")
 public class TeacherController {
     private final TeacherService teacherService;
 
@@ -24,7 +24,7 @@ public class TeacherController {
         return teacherService.listTeachers();
     }
 
-    @RequestMapping(value = "{id}")
+    @RequestMapping(value = "/{id}")
     public TeacherResponse getTeacher(@PathVariable Long id) {
         var maybeTeacher = teacherService.getTeacher(id);
 
@@ -34,7 +34,7 @@ public class TeacherController {
             return TeacherToResponseMapper.toResponse(maybeTeacher.get());
     }
 
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "/{id}")
     public void deleteTeacher(@PathVariable Long id) {
         teacherService.deleteTeacher(id);
     }
@@ -45,7 +45,7 @@ public class TeacherController {
         return teacherService.addTeacher(teacherRequest);
     }
 
-    @PutMapping(value = "{id}")
+    @PutMapping(value = "/{id}")
     public void addTeacher(@PathVariable Long id, @RequestBody @Valid UpdateTeacherRequest updateTeacherRequest) {
         teacherService.updateTeacher(id, updateTeacherRequest);
     }
