@@ -124,7 +124,7 @@ class TeachersTests {
         }
 
         @Test
-        public void deletesTeacherWithCorrectId() throws Exception {
+        public void deletesTeacherWithCorrectId() {
             var res = deleteTeacher(teacherId);
 
             assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -134,7 +134,7 @@ class TeachersTests {
         }
 
         @Test
-        public void deletesTeacherWithInCorrectId() throws Exception {
+        public void deletesTeacherWithInCorrectId() {
             var res = deleteTeacher(99999999L);
 
             assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
